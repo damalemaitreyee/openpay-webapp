@@ -4,9 +4,37 @@
   flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
-  
-}
-.datatable{
+  max-width: 100%;
   align-self: center;
 }
-
+.datatable {
+  align-self: center;
+}
+.table-container {
+  max-width: 80%;
+  margin: 1rem;
+  overflow: scroll;
+  align-self: center;
+}
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 2px;
+  cursor: pointer;
+}
+.active {
+  background-color: #888889;
+  border-radius: 50%;
+}
+.page-item {
+  list-style: none;
+  padding: 2px 12px;
+  height: 31.5px;
+  width: 31.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2px;
+}

@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-const TableRow = ({row}) => {
+const TableRow = ({ row }) => {
   return (
     <tr>
       <td>{row.Covered_Recipient_First_Name}</td>
@@ -8,8 +8,106 @@ const TableRow = ({row}) => {
       <td>{row.Recipient_City}</td>
       <td>{row.Recipient_Country}</td>
       <td>{row.Covered_Recipient_Specialty_1}</td>
+      <td>{row.Record_ID}</td>
+      <td>{row.Change_Type}</td>
+      <td>{row.Covered_Recipient_Type}</td>
+      <td>{row.Teaching_Hospital_CCN}</td>
+      <td>{row.Teaching_Hospital_ID}</td>
+      <td>{row.Teaching_Hospital_Name}</td>
+      <td>{row.Covered_Recipient_Profile_ID}</td>
+      <td>{row.Covered_Recipient_NPI}</td>
+      <td>{row.Covered_Recipient_Middle_Name}</td>
+      <td>{row.Covered_Recipient_Name_Suffix}</td>
+      <td>{row.Recipient_Primary_Business_Street_Address_Line1}</td>
+      <td>{row.Recipient_Primary_Business_Street_Address_Line2}</td>
+      <td>{row.Recipient_State}</td>
+      <td>{row.Recipient_Zip_Code}</td>
+      <td>{row.Recipient_Province}</td>
+      <td>{row.Recipient_Postal_Code}</td>
+      <td>{row.Covered_Recipient_Primary_Type_1}</td>
+      <td>{row.Covered_Recipient_Primary_Type_2}</td>
+      <td>{row.Covered_Recipient_Primary_Type_3}</td>
+      <td>{row.Covered_Recipient_Primary_Type_4}</td>
+      <td>{row.Covered_Recipient_Primary_Type_5}</td>
+      <td>{row.Covered_Recipient_Primary_Type_6}</td>
+      <td>{row.Covered_Recipient_Specialty_2}</td>
+      <td>{row.Covered_Recipient_Specialty_3}</td>
+      <td>{row.Covered_Recipient_Specialty_4}</td>
+      <td>{row.Covered_Recipient_Specialty_5}</td>
+      <td>{row.Covered_Recipient_Specialty_6}</td>
+      <td>{row.Covered_Recipient_License_State_code1}</td>
+      <td>{row.Covered_Recipient_License_State_code2}</td>
+      <td>{row.Covered_Recipient_License_State_code3}</td>
+      <td>{row.Covered_Recipient_License_State_code4}</td>
+      <td>{row.Covered_Recipient_License_State_code5}</td>
+      <td>{row.Submitting_Applicable_Manufacturer_or_Applicable_GPO_Name}</td>
+
+      <td>{row.Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_ID}</td>
+
+      <td>
+        {row.Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_Name}
+      </td>
+
+      <td>
+        {row.Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_State}
+      </td>
+
+      <td>
+        {row.Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_Country}
+      </td>
+      <td>{row.Total_Amount_of_Payment_USDollars}</td>
+      <td>{row.Date_of_Payment}</td>
+      <td>{row.Number_of_Payments_Included_in_Total_Amount}</td>
+      <td>{row.Form_of_Payment_or_Transfer_of_Value}</td>
+      <td>{row.Nature_of_Payment_or_Transfer_of_Value}</td>
+      <td>{row.City_of_Travel}</td>
+      <td>{row.State_of_Travel}</td>
+      <td>{row.Country_of_Travel}</td>
+      <td>{row.Physician_Ownership_Indicator}</td>
+      <td>{row.Third_Party_Payment_Recipient_Indicator}</td>
+      <td>
+        {row.Name_of_Third_Party_Entity_Receiving_Payment_or_Transfer_of_Value}
+      </td>
+      <td>{row.Charity_Indicator}</td>
+      <td>{row.Third_Party_Equals_Covered_Recipient_Indicator}</td>
+      <td>{row.Contextual_Information}</td>
+      <td>{row.Delay_in_Publication_Indicator}</td>
+      <td>{row.Dispute_Status_for_Publication}</td>
+      <td>{row.Related_Product_Indicator}</td>
+      <td>{row.Covered_or_Noncovered_Indicator_1}</td>
+      <td>{row.Indicate_Drug_or_Biological_or_Device_or_Medical_Supply_1}</td>
+      <td>{row.Product_Category_or_Therapeutic_Area_1}</td>
+      <td>{row.Name_of_Drug_or_Biological_or_Device_or_Medical_Supply_1}</td>
+      <td>{row.Associated_Drug_or_Biological_NDC_1}</td>
+      <td>{row.Associated_Device_or_Medical_Supply_PDI_1}</td>
+      <td>{row.Covered_or_Noncovered_Indicator_2}</td>
+      <td>{row.Indicate_Drug_or_Biological_or_Device_or_Medical_Supply_2}</td>
+      <td>{row.Product_Category_or_Therapeutic_Area_2}</td>
+      <td>{row.Name_of_Drug_or_Biological_or_Device_or_Medical_Supply_2}</td>
+      <td>{row.Associated_Drug_or_Biological_NDC_2}</td>
+      <td>{row.Associated_Device_or_Medical_Supply_PDI_2}</td>
+      <td>{row.Covered_or_Noncovered_Indicator_3}</td>
+      <td>{row.Indicate_Drug_or_Biological_or_Device_or_Medical_Supply_3}</td>
+      <td>{row.Product_Category_or_Therapeutic_Area_3}</td>
+      <td>{row.Name_of_Drug_or_Biological_or_Device_or_Medical_Supply_3}</td>
+      <td>{row.Associated_Drug_or_Biological_NDC_3}</td>
+      <td>{row.Associated_Device_or_Medical_Supply_PDI_3}</td>
+      <td>{row.Covered_or_Noncovered_Indicator_4}</td>
+      <td>{row.Indicate_Drug_or_Biological_or_Device_or_Medical_Supply_4}</td>
+      <td>{row.Product_Category_or_Therapeutic_Area_4}</td>
+      <td>{row.Name_of_Drug_or_Biological_or_Device_or_Medical_Supply_4}</td>
+      <td>{row.Associated_Drug_or_Biological_NDC_4}</td>
+      <td>{row.Associated_Device_or_Medical_Supply_PDI_4}</td>
+      <td>{row.Covered_or_Noncovered_Indicator_5}</td>
+      <td>{row.Indicate_Drug_or_Biological_or_Device_or_Medical_Supply_5}</td>
+      <td>{row.Product_Category_or_Therapeutic_Area_5}</td>
+      <td>{row.Name_of_Drug_or_Biological_or_Device_or_Medical_Supply_5}</td>
+      <td>{row.Associated_Drug_or_Biological_NDC_5}</td>
+      <td>{row.Associated_Device_or_Medical_Supply_PDI_5}</td>
+      <td>{row.Program_Year}</td>
+      <td>{row.Payment_Publication_Date}</td>
     </tr>
   );
-}
+};
 
-export default TableRow
+export default TableRow;

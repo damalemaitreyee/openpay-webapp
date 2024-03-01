@@ -1,34 +1,67 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./search.css";
 const Search = (props) => {
-  let suggestionList = props.suggestions.map((item) => ({
-    Covered_Recipient_First_Name: item.Covered_Recipient_First_Name,
-    Covered_Recipient_Last_Name: item.Covered_Recipient_Last_Name,
-    Recipient_City: item.Recipient_City,
-    Recipient_Country: item.Recipient_Country,
-    Covered_Recipient_Specialty_1: item.Covered_Recipient_Specialty_1,
-    Record_ID: item.Record_ID,
-  }));
-  useEffect
-const getSearchByOptions= async () => {
-  // const data = await fetch(searchQuery);
-  // const json = await data.json();
-  const json = data.payments;
-  //console.log(json[1]);
-  setSuggestions(json);
-};
+  const [searchField, setSearchField] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const fetchSuggestions = () => {
+    const searchBody = {
+      property: [searchField],
+      operator: searchField == "all" ? "multi_match" : "match_phrase_prefix",
+      searchText: searchQuery,
+    };
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(searchBody),
+    };
+    fetch("http://localhost:8080/api/payments?limit=10&offset=0", options)
+      .then((response) => response.json())
+      .then((data) => {
+        setSuggestions(data?.payments);
+        console.log(data);
+      })
+
+      .catch((error) => console.error(error));
+  };
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value);
+    props.setSearchText(e.target.value);
+  };
+
+  useEffect(() => {
+    if (searchQuery.length >= 3) {
+      fetchSuggestions();
+    }
+  }, [searchQuery]);
+
   return (
     <div className="search-container">
       <div className="search-by">
         <label>
           Search By
-          <select defaultValue="all" onChange="">
+          <select
+            onChange={(e) => {
+              setSearchField(e.target.value);
+              props.setSearchBy(e.target.value);
+            }}
+            defaultValue={"all"}
+          >
             <option value="all">All</option>
-            <option value="fname">Covered Recipient First Name</option>
-            <option value="lname">Covered Recipient Last Name</option>
-            <option value="city">Recipient City</option>
-            <option value="country">Recipient Country</option>
-            <option>Covered Recipient Speciality</option>
+            {props.searchFields
+              .slice(0, props.searchFields.length - 1)
+              .map((field) => {
+                return (
+                  <option value={field} key={field}>
+                    {field}
+                  </option>
+                );
+              })}
           </select>
         </label>
       </div>
@@ -36,24 +69,34 @@ const getSearchByOptions= async () => {
         <div>
           <input
             type="text"
-            value={props.searchQuesry}
-            onChange={(e) => props.setSearchQuesry(e.target.value)}
-            onFocus={() => props.setShowSuggestions(true)}
-            onBlur={() => props.setShowSuggestions(false)}
+            value={searchQuery}
+            onChange={handleChange}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => {
+              setShowSuggestions(false);
+              setSuggestions([]);
+            }}
           ></input>
-          <button onClick={props.searchData}>Search The Data</button>
+          <button
+            onClick={() =>
+              props.populateTableData(true, searchField, searchQuery)
+            }
+          >
+            Search The Data
+          </button>
         </div>
-        {props.showSuggestions && (
+        {showSuggestions && (
           <div className="suggestions-container">
             <ul>
-              {suggestionList.map((s) => (
-                <li key={s.Record_ID} className="suggestion-item">
-                  <h3>{s.Covered_Recipient_First_Name}</h3>
-                  <p>{s.Covered_Recipient_Last_Name}</p>
-                  <p>{s.Recipient_Country}</p>
-                  <p>{s.Covered_Recipient_Specialty_1}</p>
-                </li>
-              ))}
+              {suggestions &&
+                suggestions.map((s) => (
+                  <li key={s.Record_ID} className="suggestion-item">
+                    <h3>{s.Covered_Recipient_First_Name}</h3>
+                    <p>{s.Covered_Recipient_Last_Name}</p>
+                    <p>{s.Recipient_Country}</p>
+                    <p>{s.Covered_Recipient_Specialty_1}</p>
+                  </li>
+                ))}
             </ul>
           </div>
         )}
