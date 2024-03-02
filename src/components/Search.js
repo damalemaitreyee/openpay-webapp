@@ -53,9 +53,6 @@ const Search = (props) => {
   return (
     <div className="search-container">
       <div className="search-by">
-        <label className="d-inline-block" for="search_by">
-          Search By
-        </label>
         <Form.Select
           name="search_by"
           value={searchField}
