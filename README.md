@@ -1,20 +1,5 @@
 # openpay-webapp
 
-# Project Title
-
-Type Ahead Search on OpenPay Data
-
-## Demo link:
-
-Access my site at [google.com](https://google.com)
-
-## Table of Content:
-
-- [About The App](#about-the-app)
-- [Technologies](#technologies)
-- [Setup](#setup)
-- [Credits](#credits)
-
 ## About The App
 
 This is a frontend part of app where user can search records based on certain search criteria fields.
@@ -25,7 +10,7 @@ The whole data can be exported into excel on a export to excel button click.
 
 ## Technologies
 
-I used `html`, `css`, `javascript`,`ReactJS`,`Bootstrap`
+`html`, `css`, `javascript`,`ReactJS`,`Bootstrap`
 
 ## Setup
 
@@ -42,9 +27,3 @@ To Start Server:
 To Visit App:
 
 `localhost:3000/`
-
-## Credits
-
-List of contriubutors:
-
-- [Maitreyee Damale]
