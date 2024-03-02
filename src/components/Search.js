@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import Form from "react-bootstrap/Form";
 import "./search.css";
 const Search = (props) => {
   const [searchField, setSearchField] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestionSelected, setSuggestionSelected] = useState(true);
 
   const fetchSuggestions = () => {
     const searchBody = {
       property: [searchField],
-      operator: searchField == "all" ? "multi_match" : "match_phrase_prefix",
+      operator: searchField === "all" ? "multi_match" : "match_phrase_prefix",
       searchText: searchQuery,
     };
 
@@ -24,7 +27,6 @@ const Search = (props) => {
       .then((response) => response.json())
       .then((data) => {
         setSuggestions(data?.payments);
-        console.log(data);
       })
 
       .catch((error) => console.error(error));
@@ -32,6 +34,14 @@ const Search = (props) => {
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
     props.setSearchText(e.target.value);
+  };
+  const onSuggestionSelect = (data) => {
+    const datalist = [];
+    datalist.push(data);
+    props.setTableData(datalist);
+    props.setSearchClicked(true);
+    setSuggestions([]);
+    setShowSuggestions(false);
   };
 
   useEffect(() => {
@@ -43,58 +53,76 @@ const Search = (props) => {
   return (
     <div className="search-container">
       <div className="search-by">
-        <label>
+        <label className="d-inline-block" for="search_by">
           Search By
-          <select
-            onChange={(e) => {
-              setSearchField(e.target.value);
-              props.setSearchBy(e.target.value);
-            }}
-            defaultValue={"all"}
-          >
-            <option value="all">All</option>
-            {props.searchFields
-              .slice(0, props.searchFields.length - 1)
-              .map((field) => {
-                return (
-                  <option value={field} key={field}>
-                    {field}
-                  </option>
-                );
-              })}
-          </select>
         </label>
+        <Form.Select
+          name="search_by"
+          value={searchField}
+          onChange={(e) => {
+            setSearchField(e.target.value);
+            props.setSearchBy(e.target.value);
+          }}
+        >
+          <option value="all">All</option>
+          {props.searchFields
+            .slice(0, props.searchFields.length - 1)
+            .map((field) => {
+              return (
+                <option value={field} key={field}>
+                  {field}
+                </option>
+              );
+            })}
+        </Form.Select>
       </div>
       <div className="search-bar">
-        <div>
+        <div className="input-group">
           <input
             type="text"
             value={searchQuery}
             onChange={handleChange}
             onFocus={() => setShowSuggestions(true)}
             onBlur={() => {
-              setShowSuggestions(false);
-              setSuggestions([]);
+              if (!suggestionSelected) {
+                setSuggestions([]);
+                setShowSuggestions(false);
+              }
             }}
+            className="form-control"
+            placeholder="Type Here"
           ></input>
-          <button
-            onClick={() =>
-              props.populateTableData(true, searchField, searchQuery)
-            }
-          >
-            Search The Data
-          </button>
+          <div className="input-group-append">
+            <button
+              onClick={() => {
+                props.populateTableData(true, searchField, searchQuery);
+                setShowSuggestions(false);
+                setSuggestions([]);
+              }}
+              className="btn btn-secondary"
+              type="button"
+            >
+              Search
+            </button>
+          </div>
         </div>
+
         {showSuggestions && (
           <div className="suggestions-container">
-            <ul>
+            <ul className="">
               {suggestions &&
                 suggestions.map((s) => (
-                  <li key={s.Record_ID} className="suggestion-item">
-                    <h3>{s.Covered_Recipient_First_Name}</h3>
-                    <p>{s.Covered_Recipient_Last_Name}</p>
-                    <p>{s.Recipient_Country}</p>
-                    <p>{s.Covered_Recipient_Specialty_1}</p>
+                  <li key={s.Record_ID} className="">
+                    <p onClick={() => onSuggestionSelect(s)}>
+                      {props.searchFields
+                        .filter((f) => f !== "all")
+                        .map((sf) => (
+                          <span key={sf}>
+                            <strong>{sf} :</strong>
+                            <span> {s[sf]} </span>
+                          </span>
+                        ))}
+                    </p>
                   </li>
                 ))}
             </ul>

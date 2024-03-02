@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.css";
 import ReactPaginate from "react-paginate";
 import "./App.css";
 import DataTable from "./components/DataTable";
 import Search from "./components/Search";
+import { saveAs } from "file-saver";
 
 function App() {
   const [tableData, setTableData] = useState([]);
@@ -15,7 +17,7 @@ function App() {
   );
   const [searchText, setSearchText] = useState("");
   // No of Records to be displayed on each page
-  const recordsPerPage = 30;
+  const recordsPerPage = 10;
   const indexOfLastRecord =
     currentPage == 0 ? 1 * recordsPerPage : currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -45,6 +47,40 @@ function App() {
       })
       .catch((error) => console.error(error));
   };
+
+  const exportData = async (field, searchText, offset) => {
+    const searchBody = {
+      property: [field],
+      operator: field == "all" ? "multi_match" : "match_phrase_prefix",
+      searchText: searchText,
+    };
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(searchBody),
+    };
+    const response = await fetch(
+      `http://localhost:8080/api/payments/export?limit=${totalDataLength}&offset=${offset}`,
+      options
+    );
+    if (!response.ok) {
+      throw new Error(response);
+    }
+
+    const filename = response.headers
+      .get("content-disposition")
+      .split(";")
+      .find((n) => n.includes("filename="))
+      .replace("filename=", "")
+      .trim();
+
+    const blob = await response.blob();
+    // Download the file
+    saveAs(blob, filename);
+  };
+
   const populateTableData = (clicked, field, searchText) => {
     fetchTableData(field, searchText, 0);
     setSearchClicked(clicked);
@@ -75,6 +111,9 @@ function App() {
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     fetchTableData(searchBy, searchText, indexOfFirstRecord);
   }
+  const handleExport = () => {
+    exportData(searchBy, searchText, 0);
+  };
 
   return (
     <div className="App">
@@ -83,28 +122,33 @@ function App() {
         searchFields={searchFields}
         setSearchBy={setSearchBy}
         setSearchText={setSearchText}
+        setTableData={setTableData}
+        setSearchClicked={setSearchClicked}
       ></Search>
+
       {searchClicked && (
-        <>
-          <button>Export</button>
-          <div className="table-container">
-            <DataTable className="datatable" tableData={tableData}></DataTable>
-            <ReactPaginate
-              previousLabel={"← Previous"}
-              nextLabel={"Next →"}
-              pageCount={pageCount}
-              onPageChange={handlePageClick}
-              className="pagination"
-              pageClassName={"page-item"}
-              previousLinkClassName={"pagination__link"}
-              nextLinkClassName={"pagination__link"}
-              disabledClassName={"pagination__link--disabled"}
-              activeClassName={"active"}
-              marginPagesDisplayed={4}
-              pageRangeDisplayed={4}
-            ></ReactPaginate>
+        <div className="table-container">
+          <button
+            onClick={handleExport}
+            className="btn btn-secondary float-top mx-5"
+          >
+            Export to Excel
+          </button>
+          <div className="datatable">
+            <DataTable tableData={tableData}></DataTable>
           </div>
-        </>
+          <ReactPaginate
+            previousLabel={"← Previous"}
+            nextLabel={"Next →"}
+            pageCount={pageCount}
+            onPageChange={handlePageClick}
+            className="pagination"
+            pageClassName={"page-item"}
+            activeClassName={"active"}
+            marginPagesDisplayed={4}
+            pageRangeDisplayed={4}
+          ></ReactPaginate>
+        </div>
       )}
     </div>
   );

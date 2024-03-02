@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useFetch = (field, searchText, offset) => {
+const useFetch = (url, field, searchText, offset, limit) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -9,7 +9,7 @@ const useFetch = (field, searchText, offset) => {
     setIsLoading(true);
     const searchBody = {
       property: [field],
-      operator: "match_phrase_prefix",
+      operator: field == "all" ? "multi_match" : "match_phrase_prefix",
       searchText: searchText,
     };
     const options = {
@@ -19,10 +19,7 @@ const useFetch = (field, searchText, offset) => {
       },
       body: JSON.stringify(searchBody),
     };
-    fetch(
-      `http://localhost:8080/api/payments?limit=10&offset=${offset}`,
-      options
-    )
+    fetch(`${url}?limit=${limit}&offset=${offset}`, options)
       .then((response) => response.json())
       .then((data) => {
         setData(data);

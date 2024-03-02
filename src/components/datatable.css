@@ -3,7 +3,6 @@
   border-collapse: collapse;
   width: 90%;
   margin: 2rem;
-  
 }
 .filter-table td,
 .filter-table th {
@@ -20,7 +19,11 @@
 .filter-table th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
+  text-align: center;
+  text-wrap: wrap;
   background-color: #646766;
   color: white;
+  max-width: 10rem;
+  word-wrap: break-word;
+  white-space: normal;
 }
